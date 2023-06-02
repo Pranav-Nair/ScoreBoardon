@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="ultra_violet">#54457F</color>
+    <color name="light_ultra_violet">#FFE9E3F8</color>
+    <color name="red_pantone">#E63946</color>
+    <color name="aquamarine">#56E39F</color>
+    <color name="cornflower_blue">#758BFD</color>
+    <color name="lavender_blush">#FFEAEE</color>
+</resources>

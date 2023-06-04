@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ScoreBoardon"
         tools:targetApi="31">
         <activity
+            android:name=".TtTossActivity"
+            android:exported="false" />
+        <activity
             android:name=".TTWinnerScreen"
             android:exported="false" />
         <activity

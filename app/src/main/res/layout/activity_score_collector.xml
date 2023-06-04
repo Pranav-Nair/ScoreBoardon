@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Round : 1"
+        android:text="Turn : 1"
         android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold"

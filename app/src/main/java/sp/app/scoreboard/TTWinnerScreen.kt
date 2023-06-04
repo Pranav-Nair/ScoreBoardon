@@ -28,7 +28,7 @@ class TTWinnerScreen : AppCompatActivity() {
         player1score.text = extras.getInt("p1_score").toString()
         player2score.text = extras.getInt("p2_score").toString()
         val rounds = extras.getInt("rounds").toString()
-        roundstv.text = "ROUNDS : $rounds"
+        roundstv.text = "TURNS : $rounds"
 
         exitbtn.setOnClickListener {
             val intentnext = Intent(this,MainActivity::class.java)

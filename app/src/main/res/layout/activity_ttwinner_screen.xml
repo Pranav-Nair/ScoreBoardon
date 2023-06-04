@@ -196,7 +196,7 @@
                 android:id="@+id/roundstv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="ROUNDS : 0"
+                android:text="TURN : 0"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="34sp"

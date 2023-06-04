@@ -71,7 +71,7 @@ class TTScoreCollector : AppCompatActivity() {
         }
 
         mymodel.curr_round.observe(this) {
-            roundstv.text = "Round : ${it.toString()}"
+            roundstv.text = "Turn : ${it.toString()}"
         }
 
 

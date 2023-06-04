@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 
 class TTMatchForm : AppCompatActivity() {
@@ -16,12 +17,24 @@ class TTMatchForm : AppCompatActivity() {
         val p1_name_field = findViewById<EditText>(R.id.etpl1)
         val p2_name_field = findViewById<EditText>(R.id.etpl2)
         val round_field = findViewById<EditText>(R.id.etrounds)
+        val p1tossname = findViewById<TextView>(R.id.p1tosstv)
+        val p2tosstv = findViewById<TextView>(R.id.p2tosstv)
+        val p1tossopt = findViewById<TextView>(R.id.p1tossopttv)
+        val p2tossopt = findViewById<TextView>(R.id.p2tossopttv)
+        p1tossopt.setOnClickListener {
+            swapOption()
+        }
+        p2tossopt.setOnClickListener {
+            swapOption()
+        }
         startbtn.setOnClickListener {
             if(validateInputs()) {
-                val intent = Intent(this,TTScoreCollector::class.java)
+                val intent = Intent(this,TtTossActivity::class.java)
                 intent.putExtra("p1_name",p1_name_field.text.toString())
                 intent.putExtra("p2_name",p2_name_field.text.toString())
                 intent.putExtra("rounds",round_field.text.toString().toInt())
+                intent.putExtra("p1_toss_opt",p1tossopt.text.toString())
+                intent.putExtra("p2_toss_opt",p2tossopt.text.toString())
                 startActivity(intent)
             }
         }
@@ -44,5 +57,14 @@ class TTMatchForm : AppCompatActivity() {
             valid = false
         }
         return valid
+    }
+
+    fun swapOption() {
+        val p1tossopt = findViewById<TextView>(R.id.p1tossopttv)
+        val p2tossopt = findViewById<TextView>(R.id.p2tossopttv)
+        val temp = p1tossopt.text
+        p1tossopt.text = p2tossopt.text
+        p2tossopt.text = temp
+
     }
 }

@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 
-class TtTossActivity : AppCompatActivity() {
+class TossActivity : AppCompatActivity() {
     var tossed : Boolean = false
     var p1_name : String =""
     var p2_name : String=""
@@ -16,7 +16,7 @@ class TtTossActivity : AppCompatActivity() {
     var p2_choice=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tt_toss)
+        setContentView(R.layout.activity_toss)
         val intent = intent
         val extras = intent.extras!!
         p1_name = extras.getString("p1_name")!!
@@ -33,7 +33,7 @@ class TtTossActivity : AppCompatActivity() {
                 intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
                 startActivity(intentnext)
             } else {
-                Toast.makeText(this@TtTossActivity,"Perform the toss",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@TossActivity,"Perform the toss",Toast.LENGTH_LONG).show()
             }
         }
     }

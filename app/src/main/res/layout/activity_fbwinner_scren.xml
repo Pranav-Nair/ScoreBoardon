@@ -81,7 +81,7 @@
             android:layout_width="175dp"
             android:layout_height="125dp"
             android:layout_margin="2dp"
-            app:cardBackgroundColor="@color/cornflower_blue"
+            app:cardBackgroundColor="@color/saffron"
             app:cardCornerRadius="15dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -127,7 +127,7 @@
             android:layout_width="175dp"
             android:layout_height="125dp"
             android:layout_margin="2dp"
-            app:cardBackgroundColor="@color/aquamarine"
+            app:cardBackgroundColor="@color/tiffany_blue"
             app:cardCornerRadius="15dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -174,7 +174,7 @@
         android:id="@+id/roundscv"
         android:layout_width="300dp"
         android:layout_height="75dp"
-        app:cardBackgroundColor="@color/ultra_violet"
+        app:cardBackgroundColor="@color/tropical_indigo"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toTopOf="@id/guideline46"
         app:layout_constraintEnd_toEndOf="@id/guideline37"

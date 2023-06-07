@@ -14,7 +14,7 @@ class BMScoreCollector : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_score_collector)
+        setContentView(R.layout.activity_bmscore_collector)
         class BMScoreTrackerFactory(p1name:String,p2name:String,rounds : Int) : ViewModelProvider.Factory {
             private val extras = intent.extras
             private val p1name = p1name
@@ -87,7 +87,7 @@ class BMScoreCollector : AppCompatActivity() {
 
     fun checkandLoadWinScreen() {
         if (matchover) {
-            var intentnext= Intent(this,BMWinnerScreen::class.java)
+            val intentnext= Intent(this,BMWinnerScreen::class.java)
             intentnext.putExtra("winner",mymodel.getWinner())
             intentnext.putExtra("p1_name",mymodel.p1_name.value)
             intentnext.putExtra("p2_name",mymodel.p2_name.value)

@@ -9,9 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 
 class TTMatchForm : AppCompatActivity() {
-    val selfintent=intent
-    val extras = selfintent.extras
     override fun onCreate(savedInstanceState: Bundle?) {
+        val selfintent=intent
+        val extras = selfintent.extras
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ttmatch_form)
         val startbtn = findViewById<Button>(R.id.startbtn)

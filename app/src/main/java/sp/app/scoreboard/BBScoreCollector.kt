@@ -14,7 +14,7 @@ class BBScoreCollector : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_score_collector)
+        setContentView(R.layout.activity_bbscore_collector)
         class BBScoreTrackerFactory(p1name:String,p2name:String,rounds : Int) : ViewModelProvider.Factory {
             private val extras = intent.extras
             private val p1name = p1name

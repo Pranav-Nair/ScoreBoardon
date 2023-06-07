@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            app:cardBackgroundColor="@color/cornflower_blue"
+            app:cardBackgroundColor="@color/saffron"
             app:cardCornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            app:cardBackgroundColor="@color/aquamarine"
+            app:cardBackgroundColor="@color/tiffany_blue"
             app:cardCornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -141,7 +141,7 @@
                 android:id="@+id/p1scorecv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="#E1E5FB"
+                app:cardBackgroundColor="#F8F3E3"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"
@@ -182,9 +182,10 @@
             android:layout_margin="50dp">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/p2scorecv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:cardBackgroundColor="#DCFFEE"
+                app:cardBackgroundColor="#DBFAF5"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp"

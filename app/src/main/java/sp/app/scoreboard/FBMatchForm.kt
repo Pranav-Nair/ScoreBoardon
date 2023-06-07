@@ -10,6 +10,8 @@ import android.widget.Toast
 
 class FBMatchForm : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val selfintent=intent
+        val extras = selfintent.extras
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fb_match_form)
         val startbtn = findViewById<Button>(R.id.startbtn)
@@ -20,6 +22,7 @@ class FBMatchForm : AppCompatActivity() {
         val p2tosstv = findViewById<TextView>(R.id.p2tosstv)
         val p1tossopt = findViewById<TextView>(R.id.p1tossopttv)
         val p2tossopt = findViewById<TextView>(R.id.p2tossopttv)
+        val game = extras?.getInt("game")
         p1tossopt.setOnClickListener {
             swapOption()
         }
@@ -34,6 +37,7 @@ class FBMatchForm : AppCompatActivity() {
                 intent.putExtra("rounds",round_field.text.toString().toInt())
                 intent.putExtra("p1_toss_opt",p1tossopt.text.toString())
                 intent.putExtra("p2_toss_opt",p2tossopt.text.toString())
+                intent.putExtra("game",game)
                 startActivity(intent)
             }
         }

@@ -8,12 +8,12 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
-class TTMatchForm : AppCompatActivity() {
-    val selfintent=intent
-    val extras = selfintent.extras
+class BBMatchForm : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val selfintent=intent
+        val extras = selfintent.extras
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ttmatch_form)
+        setContentView(R.layout.activity_bbmatch_form)
         val startbtn = findViewById<Button>(R.id.startbtn)
         val p1_name_field = findViewById<EditText>(R.id.etpl1)
         val p2_name_field = findViewById<EditText>(R.id.etpl2)
@@ -42,7 +42,6 @@ class TTMatchForm : AppCompatActivity() {
             }
         }
     }
-
     fun validateInputs() : Boolean {
         var valid = true
         val pname1_field = findViewById<EditText>(R.id.etpl1)
@@ -50,13 +49,13 @@ class TTMatchForm : AppCompatActivity() {
         val round_field = findViewById<EditText>(R.id.etrounds)
 
         if (pname1_field.text.isNullOrEmpty()) {
-            Toast.makeText(this@TTMatchForm,"Please fill Player 1 Name",Toast.LENGTH_LONG).show()
+            Toast.makeText(this@BBMatchForm,"Please fill Player 1 Name", Toast.LENGTH_LONG).show()
             valid = false
         } else if (pname2_field.text.isNullOrEmpty()) {
-            Toast.makeText(this@TTMatchForm,"Please fill Player 2 Name",Toast.LENGTH_LONG).show()
+            Toast.makeText(this@BBMatchForm,"Please fill Player 2 Name", Toast.LENGTH_LONG).show()
             valid = false
         } else if (round_field.text.isNullOrEmpty() || round_field.text.toString().toInt() < 0) {
-            Toast.makeText(this@TTMatchForm,"Rounds must be a valid number",Toast.LENGTH_LONG).show()
+            Toast.makeText(this@BBMatchForm,"Rounds must be a valid number", Toast.LENGTH_LONG).show()
             valid = false
         }
         return valid

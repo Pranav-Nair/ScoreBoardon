@@ -7,8 +7,4 @@
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="O_MR1">true</item>
     </style>
-
-    <style name="Theme.ScoreBoardon" parent="Base.Theme.ScoreBoardon" >
-
-    </style>
 </resources>

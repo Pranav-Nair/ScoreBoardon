@@ -8,22 +8,22 @@ import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class FbScoreCollector : AppCompatActivity() {
-    private lateinit var mymodel : FBScoreTracker
+class BMScoreCollector : AppCompatActivity() {
+    private lateinit var mymodel : BMScoreTracker
     var matchover : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_score_collector)
-        class FBScoreTrackerFactory(p1name:String,p2name:String,rounds : Int) : ViewModelProvider.Factory {
+        class BMScoreTrackerFactory(p1name:String,p2name:String,rounds : Int) : ViewModelProvider.Factory {
             private val extras = intent.extras
             private val p1name = p1name
             private val p2name = p2name
             private val rounds = rounds
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(FBScoreTracker::class.java)) {
-                    return FBScoreTracker(p1name,p2name, rounds) as T
+                if (modelClass.isAssignableFrom(BMScoreTracker::class.java)) {
+                    return BMScoreTracker(p1name,p2name, rounds) as T
                 }
                 return super.create(modelClass)
             }
@@ -37,7 +37,7 @@ class FbScoreCollector : AppCompatActivity() {
         p1name = extras?.getString("p1_name").toString()
         p2name = extras?.getString("p2_name").toString()
         rounds = extras?.getInt("rounds")!!
-        mymodel = ViewModelProvider(this,FBScoreTrackerFactory(p1name,p2name,rounds)).get(FBScoreTracker::class.java)
+        mymodel = ViewModelProvider(this,BMScoreTrackerFactory(p1name,p2name,rounds)).get(BMScoreTracker::class.java)
 
         val player1tv = findViewById<TextView>(R.id.pl1nametv)
         val player2tv = findViewById<TextView>(R.id.pl2nametv)
@@ -87,7 +87,7 @@ class FbScoreCollector : AppCompatActivity() {
 
     fun checkandLoadWinScreen() {
         if (matchover) {
-            var intentnext= Intent(this,FBWinnerScreen::class.java)
+            var intentnext= Intent(this,BMWinnerScreen::class.java)
             intentnext.putExtra("winner",mymodel.getWinner())
             intentnext.putExtra("p1_name",mymodel.p1_name.value)
             intentnext.putExtra("p2_name",mymodel.p2_name.value)

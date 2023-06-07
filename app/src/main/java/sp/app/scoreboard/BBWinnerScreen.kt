@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 
-class FBWinnerScren : AppCompatActivity() {
+class BBWinnerScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fbwinner_scren)
+        setContentView(R.layout.activity_bbwinner_screen)
         val intent = intent
         val extras = intent.extras!!
 

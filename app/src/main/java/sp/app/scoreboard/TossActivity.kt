@@ -23,15 +23,36 @@ class TossActivity : AppCompatActivity() {
         p2_name = extras.getString("p2_name")!!
         p1_choice = extras.getString("p1_toss_opt")!!
         p2_choice = extras.getString("p2_toss_opt")!!
+        val game = extras.getInt("game")
         val continuebtn = findViewById<Button>(R.id.continuebtn)
         chooseSide()
         continuebtn.setOnClickListener {
             if (tossed) {
-                var intentnext = Intent(this,TTScoreCollector::class.java)
-                intentnext.putExtra("p1_name",p1_name)
-                intentnext.putExtra("p2_name",p2_name)
-                intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
-                startActivity(intentnext)
+                if (game==1) {
+                    val intentnext = Intent(this,TTScoreCollector::class.java)
+                    intentnext.putExtra("p1_name",p1_name)
+                    intentnext.putExtra("p2_name",p2_name)
+                    intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                    startActivity(intentnext)
+                }else if (game==2) {
+                    val intentnext = Intent(this,FbScoreCollector::class.java)
+                    intentnext.putExtra("p1_name",p1_name)
+                    intentnext.putExtra("p2_name",p2_name)
+                    intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                    startActivity(intentnext)
+                } else if (game==3) {
+                    val intentnext = Intent(this,BBScoreCollector::class.java)
+                    intentnext.putExtra("p1_name",p1_name)
+                    intentnext.putExtra("p2_name",p2_name)
+                    intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                    startActivity(intentnext)
+                } else if (game==4) {
+                    val intentnext = Intent(this,BMScoreCollector::class.java)
+                    intentnext.putExtra("p1_name",p1_name)
+                    intentnext.putExtra("p2_name",p2_name)
+                    intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                    startActivity(intentnext)
+                }
             } else {
                 Toast.makeText(this@TossActivity,"Perform the toss",Toast.LENGTH_LONG).show()
             }

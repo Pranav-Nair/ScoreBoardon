@@ -1,10 +1,23 @@
 package sp.app.scoreboard
 
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
+import android.media.Image
+import android.media.ImageReader
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -14,16 +27,38 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.common.util.concurrent.ListenableFuture
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import sp.app.scoreboard.ml.Detect
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import javax.security.auth.callback.Callback
 
 class TTCamScoreCollector : AppCompatActivity() {
-    private lateinit var mymodel : TtScoreTracker
-    var matchover : Boolean = false
-    lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
+    private lateinit var mymodel: TtScoreTracker
+    lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+    private lateinit var cameraPermissionDeferred: CompletableDeferred<Boolean>
+    lateinit var previewView: PreviewView
+    var matchover: Boolean = false
+    private val mutex = Mutex()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tt_cam_score_collector)
-        class TtScoreTrackerFactory(p1name:String,p2name:String,rounds : Int) : ViewModelProvider.Factory {
+        previewView = findViewById(R.id.camview)
+        class TtScoreTrackerFactory(p1name: String, p2name: String, rounds: Int) :
+            ViewModelProvider.Factory {
             private val extras = intent.extras
             private val p1name = p1name
             private val p2name = p2name
@@ -31,41 +66,104 @@ class TTCamScoreCollector : AppCompatActivity() {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TtScoreTracker::class.java)) {
-                    return TtScoreTracker(p1name,p2name, rounds) as T
+                    return TtScoreTracker(p1name, p2name, rounds) as T
                 }
                 return super.create(modelClass)
             }
         }
 
-        if (getCameraPermission()) {
-            startCameraService()
-        }
 
-        var p1name=""
-        var p2name=""
-        var rounds=0
+        var p1name = ""
+        var p2name = ""
+        var rounds = 0
         val intent = intent
         val extras = intent.extras
         p1name = extras?.getString("p1_name").toString()
         p2name = extras?.getString("p2_name").toString()
         rounds = extras?.getInt("rounds")!!
-        mymodel = ViewModelProvider(this,TtScoreTrackerFactory(p1name,p2name,rounds)).get(TtScoreTracker::class.java)
+        mymodel = ViewModelProvider(this, TtScoreTrackerFactory(p1name, p2name, rounds)).get(
+            TtScoreTracker::class.java
+        )
         val turntv = findViewById<TextView>(R.id.turntv)
         val p1scoretv = findViewById<TextView>(R.id.p1scoretv)
         val p2scoretv = findViewById<TextView>(R.id.p2scoretv)
         mymodel.p1_score.observe(this, Observer {
             p1scoretv.text = it.toString()
         })
-        mymodel.p1_score.observe(this, Observer {
+        mymodel.p2_score.observe(this, Observer {
             p2scoretv.text = it.toString()
         })
         mymodel.curr_round.observe(this, Observer {
             turntv.text = "TURN : $it"
         })
+        mymodel.matchover.observe(this, Observer {
+            matchover = it
+        })
+
+       lifecycleScope.launch(Dispatchers.IO) {
+            // Coroutine code goes here
+            // Perform asynchronous tasks
+           val job = launch {
+               cameraPermissionDeferred = CompletableDeferred()
+               getCameraPermission()
+               if (cameraPermissionDeferred.await()){
+                   startCameraService()
+               } else {
+                   finishActivity(100)
+               }
+            }
+           job.join()
+           withContext(Dispatchers.Main) {
+                while (!matchover) {
+                    var bitmap = previewView.bitmap
+                    var res = bitmap?.let {
+                        PredictOutcome(it)
+                    }
+                    Log.i("coroutine","$res")
+                    if (res == true) {
+                        increase_p1_scoe()
+                    }
+                    else if (res==false) {
+                        increase_p2_score()
+                    }
+                    delay(2000)
+                }
+               loadWinScreen()
+           }
+
+            // Update UI or perform other tasks
+            // Continue with more coroutine code
+        }
+
+
 
     }
 
-    fun startCameraService() {
+    fun loadWinScreen() {
+        if (matchover) {
+            val intentnext = Intent(this,TTWinnerScreen::class.java)
+            intentnext.putExtra("winner",mymodel.getWinner())
+            intentnext.putExtra("p1_name",mymodel.p1_name.value)
+            intentnext.putExtra("p2_name",mymodel.p2_name.value)
+            intentnext.putExtra("p1_score",mymodel.p1_score.value)
+            intentnext.putExtra("p2_score",mymodel.p2_score.value)
+            intentnext.putExtra("rounds",mymodel.max_rounds.value)
+            startActivity(intentnext)
+        }
+    }
+    suspend fun increase_p1_scoe() {
+        mutex.lock()
+        mymodel.increase_p1_Score()
+        mutex.unlock()
+    }
+
+    suspend fun increase_p2_score() {
+        mutex.lock()
+        mymodel.increase_p2_Score()
+        mutex.unlock()
+    }
+
+    suspend fun startCameraService() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider = cameraProviderFuture.get()
@@ -74,7 +172,7 @@ class TTCamScoreCollector : AppCompatActivity() {
     }
 
     private fun bindPreview(cameraProvider: ProcessCameraProvider?) {
-        val previewView = findViewById<PreviewView>(R.id.camview)
+        previewView = findViewById(R.id.camview)
         var preview : Preview = Preview.Builder()
             .build()
 
@@ -88,16 +186,13 @@ class TTCamScoreCollector : AppCompatActivity() {
 
     }
 
-    fun getCameraPermission() : Boolean {
-        var granted = false
+    suspend fun getCameraPermission() {
         val permissionGranted = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
         if (!permissionGranted) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), 111)
         } else {
-            granted =true
+            cameraPermissionDeferred.complete(true)
         }
-        granted = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-        return granted
     }
 
     override fun onRequestPermissionsResult(
@@ -107,8 +202,65 @@ class TTCamScoreCollector : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startCameraService()
+            cameraPermissionDeferred.complete(true)
+        }
+        else {
+            cameraPermissionDeferred.complete(false)
         }
 
     }
+
+    fun PredictOutcome(bitmap: Bitmap) : Boolean {
+        val model = Detect.newInstance(this)
+        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 320, 320, true)
+        val byteBuffer = convertBitmapToByteBuffer(resizedBitmap)
+// Creates inputs for reference.
+        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 320, 320, 3), DataType.FLOAT32)
+        inputFeature0.loadBuffer(byteBuffer)
+
+// Runs model inference and gets result.
+        val outputs = model.process(inputFeature0)
+        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+        val outputFeature1 = outputs.outputFeature1AsTensorBuffer
+        val outputFeature2 = outputs.outputFeature2AsTensorBuffer
+        val outputFeature3 = outputs.outputFeature3AsTensorBuffer
+
+        val thumbsUpScore = outputFeature0.floatArray[0]
+        val threshold = 0.9
+        val isThumbsUp = thumbsUpScore >= threshold
+
+// Releases model resources if no longer used.
+        model.close()
+        return isThumbsUp
+    }
+
+    private fun convertBitmapToByteBuffer(resizedBitmap: Bitmap?): ByteBuffer {
+        val inputSize = 320 // Input size required by the TFLite model
+        val modelInputSize = inputSize * inputSize * 3 * 4 // Input size in bytes (3 channels, 4 bytes per float)
+
+        val byteBuffer = ByteBuffer.allocateDirect(modelInputSize)
+        byteBuffer.order(ByteOrder.nativeOrder())
+
+        val pixels = IntArray(inputSize * inputSize)
+        resizedBitmap?.getPixels(pixels, 0, inputSize, 0, 0, inputSize, inputSize)
+
+        val pixelValues = FloatArray(3)
+        for (pixel in pixels) {
+            val red = (pixel shr 16 and 0xFF) / 255.0f
+            val green = (pixel shr 8 and 0xFF) / 255.0f
+            val blue = (pixel and 0xFF) / 255.0f
+
+            pixelValues[0] = red
+            pixelValues[1] = green
+            pixelValues[2] = blue
+
+            for (value in pixelValues) {
+                byteBuffer.putFloat(value)
+            }
+        }
+
+        byteBuffer.rewind()
+        return byteBuffer
+    }
+
 }

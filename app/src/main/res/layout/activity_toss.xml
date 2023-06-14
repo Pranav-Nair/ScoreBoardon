@@ -179,4 +179,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.185" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/togglecam"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:enabled="false"
+        android:tint="@color/black"
+        app:backgroundTint="@color/light_ultra_violet"
+        app:layout_constraintBottom_toBottomOf="@id/guideline9"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/continuebtn"
+        app:layout_constraintTop_toBottomOf="@id/guideline19"
+        app:srcCompat="@drawable/ic_camera_vec" />
 </androidx.constraintlayout.widget.ConstraintLayout>

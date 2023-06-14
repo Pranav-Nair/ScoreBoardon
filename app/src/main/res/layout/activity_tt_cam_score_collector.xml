@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TTCamScoreCollector">
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" app:layout_constraintGuide_percent="0.3"/>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" app:layout_constraintGuide_percent="0.7"/>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" app:layout_constraintGuide_percent="0.95"/>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" app:layout_constraintGuide_percent="0.85"/>
+    <androidx.cardview.widget.CardView android:id="@+id/turncv" android:layout_width="0dp" android:layout_height="0dp" app:cardBackgroundColor="@color/design_default_color_primary" app:cardCornerRadius="15dp" app:layout_constraintBottom_toTopOf="@id/guideline9" app:layout_constraintDimensionRatio="3:1" app:layout_constraintEnd_toEndOf="@id/guideline3" app:layout_constraintStart_toStartOf="@id/guideline2" app:layout_constraintTop_toTopOf="@id/guideline8">
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="match_parent">
+            <TextView android:id="@+id/turntv" android:layout_width="0dp" android:layout_height="wrap_content" android:text="TURN:" android:textAlignment="center" android:textColor="@color/white" android:textSize="24sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" app:layout_constraintGuide_percent="0.05"/>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline9" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" app:layout_constraintGuide_percent="0.14"/>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" app:layout_constraintGuide_percent="0.1"/>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline11" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" app:layout_constraintGuide_percent="0.9"/>
+    <androidx.cardview.widget.CardView android:id="@+id/p1scorecv" android:layout_width="0dp" android:layout_height="0dp" android:layout_margin="5dp" app:cardBackgroundColor="#FFC107" app:cardCornerRadius="15dp" app:layout_constraintBottom_toTopOf="@id/guideline12" app:layout_constraintDimensionRatio="3:1" app:layout_constraintEnd_toEndOf="@id/guideline13" app:layout_constraintStart_toStartOf="@id/guideline10" app:layout_constraintTop_toBottomOf="@id/guideline9">
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/p1scorecl" android:layout_width="match_parent" android:layout_height="match_parent">
+            <TextView android:id="@+id/p1scoretv" android:layout_width="0dp" android:layout_height="wrap_content" android:text="0" android:textAlignment="center" android:textColor="@color/white" android:textSize="24sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline12" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" app:layout_constraintGuide_percent="0.23"/>
+    <androidx.constraintlayout.widget.Guideline android:id="@+id/guideline13" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" app:layout_constraintGuide_percent="0.5"/>
+    <androidx.cardview.widget.CardView android:id="@+id/p2scorecv" android:layout_width="0dp" android:layout_height="0dp" android:layout_margin="5dp" app:cardBackgroundColor="#673AB7" app:cardCornerRadius="15dp" app:layout_constraintBottom_toTopOf="@id/guideline12" app:layout_constraintDimensionRatio="3:1" app:layout_constraintEnd_toEndOf="@id/guideline11" app:layout_constraintStart_toStartOf="@id/guideline13" app:layout_constraintTop_toBottomOf="@id/guideline9">
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/p2scorecl" android:layout_width="match_parent" android:layout_height="match_parent">
+            <TextView android:id="@+id/p2scoretv" android:layout_width="0dp" android:layout_height="wrap_content" android:text="0" android:textAlignment="center" android:textColor="@color/white" android:textSize="24sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.camera.view.PreviewView android:id="@+id/camview" android:layout_width="match_parent" android:layout_height="match_parent" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

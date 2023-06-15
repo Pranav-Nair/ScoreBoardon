@@ -129,7 +129,7 @@ class TTCamScoreCollector : AppCompatActivity() {
                     else if (res==false) {
                         increase_p2_score()
                     }
-                    delay(2000)
+                    delay(5000)
                 }
                loadWinScreen()
            }
@@ -229,6 +229,7 @@ class TTCamScoreCollector : AppCompatActivity() {
     }
 
     fun PredictOutcome(bitmap: Bitmap) : Boolean {
+        var isthumbsup = false
         val model = Detect.newInstance(this)
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 320, 320, true)
         val byteBuffer = convertBitmapToByteBuffer(resizedBitmap)
@@ -238,18 +239,18 @@ class TTCamScoreCollector : AppCompatActivity() {
 
 // Runs model inference and gets result.
         val outputs = model.process(inputFeature0)
-        val outputFeature0 = outputs.outputFeature0AsTensorBuffer
-        val outputFeature1 = outputs.outputFeature1AsTensorBuffer
-        val outputFeature2 = outputs.outputFeature2AsTensorBuffer
-        val outputFeature3 = outputs.outputFeature3AsTensorBuffer
+        val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray[0]
+        val outputFeature1 = outputs.outputFeature1AsTensorBuffer.floatArray[0]
+        val outputFeature2 = outputs.outputFeature2AsTensorBuffer.floatArray[0]
+        val outputFeature3 = outputs.outputFeature3AsTensorBuffer.floatArray[0]
 
-        val thumbsUpScore = outputFeature0.floatArray[0]
-        val threshold = 0.9
-        val isThumbsUp = thumbsUpScore >= threshold
-
-// Releases model resources if no longer used.
         model.close()
-        return isThumbsUp
+        if (outputFeature3==1.0f) {
+            isthumbsup = true
+        } else if (outputFeature3 == 0.0f) {
+            isthumbsup = false
+        }
+        return isthumbsup
     }
 
     private fun convertBitmapToByteBuffer(resizedBitmap: Bitmap?): ByteBuffer {

@@ -48,6 +48,8 @@ import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.security.auth.callback.Callback
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
 class TTCamScoreCollector : AppCompatActivity() {
     private lateinit var mymodel: TtScoreTracker
@@ -123,13 +125,13 @@ class TTCamScoreCollector : AppCompatActivity() {
                         PredictOutcome(it)
                     }
                     Log.i("coroutine","$res")
-                    if (res == true) {
+                    if (res == 1) {
                         increase_p1_scoe()
                     }
-                    else if (res==false) {
+                    else if (res==0) {
                         increase_p2_score()
                     }
-                    delay(5000)
+                    delay(2000)
                 }
                loadWinScreen()
            }
@@ -228,8 +230,8 @@ class TTCamScoreCollector : AppCompatActivity() {
 
     }
 
-    fun PredictOutcome(bitmap: Bitmap) : Boolean {
-        var isthumbsup = false
+    fun PredictOutcome(bitmap: Bitmap) : Int {
+        var isthumbsup : Int = -1
         val model = Detect.newInstance(this)
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 320, 320, true)
         val byteBuffer = convertBitmapToByteBuffer(resizedBitmap)
@@ -242,13 +244,12 @@ class TTCamScoreCollector : AppCompatActivity() {
         val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray[0]
         val outputFeature1 = outputs.outputFeature1AsTensorBuffer.floatArray[0]
         val outputFeature2 = outputs.outputFeature2AsTensorBuffer.floatArray[0]
-        val outputFeature3 = outputs.outputFeature3AsTensorBuffer.floatArray[0]
-
+        val outputFeature3 = outputs.outputFeature3AsTensorBuffer.floatArray[0].roundToInt()
         model.close()
-        if (outputFeature3==1.0f) {
-            isthumbsup = true
-        } else if (outputFeature3 == 0.0f) {
-            isthumbsup = false
+        if (outputFeature3==1) {
+            isthumbsup=1
+        } else if (outputFeature3==0) {
+            isthumbsup=0
         }
         return isthumbsup
     }

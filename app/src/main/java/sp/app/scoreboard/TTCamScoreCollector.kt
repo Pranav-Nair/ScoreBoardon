@@ -1,5 +1,6 @@
 package sp.app.scoreboard
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -14,6 +15,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.WorkerThread
+import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
@@ -109,7 +112,7 @@ class TTCamScoreCollector : AppCompatActivity() {
                if (cameraPermissionDeferred.await()){
                    startCameraService()
                } else {
-                   finishActivity(100)
+                   loadPermisionRequiredDIalog()
                }
             }
            job.join()
@@ -149,6 +152,21 @@ class TTCamScoreCollector : AppCompatActivity() {
             intentnext.putExtra("p2_score",mymodel.p2_score.value)
             intentnext.putExtra("rounds",mymodel.max_rounds.value)
             startActivity(intentnext)
+        }
+    }
+
+    @WorkerThread
+    fun loadPermisionRequiredDIalog() {
+        ContextCompat.getMainExecutor(this).execute {
+            val builder = AlertDialog.Builder(this)
+            val listener = DialogInterface.OnClickListener { _, _ ->
+                finish()
+            }
+            builder.setTitle("Permission Required")
+            builder.setMessage("this app needs camera permission to perform gesture detection")
+            builder.setPositiveButton("Ok", listener)
+            val dialog = builder.create()
+            dialog.show()
         }
     }
     suspend fun increase_p1_scoe() {

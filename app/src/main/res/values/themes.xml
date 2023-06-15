@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ScoreBoardon" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/cornflower_blue</item>
+        <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="O_MR1">true</item>

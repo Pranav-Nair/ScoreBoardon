@@ -24,7 +24,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clickable="true"
+        app:cardBackgroundColor="#00FFFFFF"
         app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
         app:layout_constraintBottom_toTopOf="@id/guideline5"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
@@ -193,5 +195,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/continuebtn"
         app:layout_constraintTop_toBottomOf="@id/guideline19"
-        app:srcCompat="@drawable/ic_camera_vec" />
+        app:srcCompat="@drawable/camera_ic_vec" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -193,6 +193,7 @@
                     android:ems="10"
                     android:inputType="numberSigned"
                     android:textAlignment="center"
+                    android:textColor="@color/ultra_violet"
                     android:textSize="34sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -33,6 +33,8 @@ class TossActivity : AppCompatActivity() {
         val camtoggle = findViewById<FloatingActionButton>(R.id.togglecam)
         if (enableCamToggle(game)) {
             camtoggle.isEnabled = true
+            camtoggle.backgroundTintList = ColorStateList.valueOf(getColor(R.color.light_ultra_violet))
+            camtoggle.imageTintList = ColorStateList.valueOf(getColor(R.color.ultra_violet))
         }
         chooseSide()
         camtoggle.setOnClickListener {
@@ -42,7 +44,7 @@ class TossActivity : AppCompatActivity() {
                 usecam = true
             } else {
                 camtoggle.backgroundTintList = ColorStateList.valueOf(getColor(R.color.light_ultra_violet))
-                camtoggle.imageTintList = ColorStateList.valueOf(getColor(R.color.black))
+                camtoggle.imageTintList = ColorStateList.valueOf(getColor(R.color.ultra_violet))
                 usecam = false
 
             }

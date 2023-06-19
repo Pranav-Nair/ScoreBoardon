@@ -3,13 +3,10 @@ package sp.app.scoreboard
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 
 class TTScoreCollector : AppCompatActivity() {
     private lateinit var mymodel : TtScoreTracker

@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
@@ -32,8 +31,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 class TTCamScoreCollector : AppCompatActivity() {
     private lateinit var mymodel: TtScoreTracker
@@ -90,8 +87,6 @@ class TTCamScoreCollector : AppCompatActivity() {
         })
 
        lifecycleScope.launch(Dispatchers.IO) {
-            // Coroutine code goes here
-            // Perform asynchronous tasks
            val job = launch {
                cameraPermissionDeferred = CompletableDeferred()
                getCameraPermission()
@@ -108,7 +103,6 @@ class TTCamScoreCollector : AppCompatActivity() {
                     var res = bitmap?.let {
                         PredictOutcome(it)
                     }
-                    Log.i("coroutine","$res")
                     if (res == 1) {
                         increase_p1_scoe()
                     }
@@ -119,13 +113,7 @@ class TTCamScoreCollector : AppCompatActivity() {
                 }
                loadWinScreen()
            }
-
-            // Update UI or perform other tasks
-            // Continue with more coroutine code
         }
-
-
-
     }
 
     fun loadWinScreen() {
@@ -231,11 +219,9 @@ class TTCamScoreCollector : AppCompatActivity() {
             GestureRecognizer.createFromOptions(this, options)
         val mpImage = BitmapImageBuilder(bitmap).build()
         val result = gestureRecognizer?.recognize(mpImage)
-        Log.i("predict","$result")
         if (result != null) {
             if (result.gestures().isNotEmpty()){
                 val gesture = result.gestures()[0][0].categoryName()
-                Log.i("predict","$gesture")
                 if (gesture.toString()=="Thumb_Up") {
                     isThumbsUp=1
                 }
@@ -247,34 +233,4 @@ class TTCamScoreCollector : AppCompatActivity() {
         return isThumbsUp
 
     }
-
-    private fun convertBitmapToByteBuffer(resizedBitmap: Bitmap?): ByteBuffer {
-        val inputSize = 320 // Input size required by the TFLite model
-        val modelInputSize = inputSize * inputSize * 3 * 4 // Input size in bytes (3 channels, 4 bytes per float)
-
-        val byteBuffer = ByteBuffer.allocateDirect(modelInputSize)
-        byteBuffer.order(ByteOrder.nativeOrder())
-
-        val pixels = IntArray(inputSize * inputSize)
-        resizedBitmap?.getPixels(pixels, 0, inputSize, 0, 0, inputSize, inputSize)
-
-        val pixelValues = FloatArray(3)
-        for (pixel in pixels) {
-            val red = (pixel shr 16 and 0xFF) / 255.0f
-            val green = (pixel shr 8 and 0xFF) / 255.0f
-            val blue = (pixel and 0xFF) / 255.0f
-
-            pixelValues[0] = red
-            pixelValues[1] = green
-            pixelValues[2] = blue
-
-            for (value in pixelValues) {
-                byteBuffer.putFloat(value)
-            }
-        }
-
-        byteBuffer.rewind()
-        return byteBuffer
-    }
-
 }

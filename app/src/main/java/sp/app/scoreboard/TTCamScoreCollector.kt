@@ -22,18 +22,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.mediapipe.framework.image.BitmapImageBuilder
+import com.google.mediapipe.tasks.core.BaseOptions
+import com.google.mediapipe.tasks.vision.core.RunningMode
+import com.google.mediapipe.tasks.vision.gesturerecognizer.GestureRecognizer
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import org.tensorflow.lite.DataType
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import sp.app.scoreboard.ml.Detect
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import kotlin.math.roundToInt
 
 class TTCamScoreCollector : AppCompatActivity() {
     private lateinit var mymodel: TtScoreTracker
@@ -115,7 +115,7 @@ class TTCamScoreCollector : AppCompatActivity() {
                     else if (res==0) {
                         increase_p2_score()
                     }
-                    delay(2000)
+                    delay(5000)
                 }
                loadWinScreen()
            }
@@ -215,27 +215,37 @@ class TTCamScoreCollector : AppCompatActivity() {
     }
 
     fun PredictOutcome(bitmap: Bitmap) : Int {
-        var isthumbsup : Int = -1
-        val model = Detect.newInstance(this)
-        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 320, 320, true)
-        val byteBuffer = convertBitmapToByteBuffer(resizedBitmap)
-// Creates inputs for reference.
-        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 320, 320, 3), DataType.FLOAT32)
-        inputFeature0.loadBuffer(byteBuffer)
+        var isThumbsUp = -1
+        val baseOptionsBuilder = BaseOptions.builder().setModelAssetPath("gesture_recognizer.task")
+        val baseOptions = baseOptionsBuilder.build()
+        val optionsBuilder =
+            GestureRecognizer.GestureRecognizerOptions.builder()
+                .setBaseOptions(baseOptions)
+                .setMinHandDetectionConfidence(0.7f)
+                .setMinTrackingConfidence(0.7f)
+                .setMinHandPresenceConfidence(0.7f)
+                .setRunningMode(RunningMode.IMAGE)
 
-// Runs model inference and gets result.
-        val outputs = model.process(inputFeature0)
-        val outputFeature0 = outputs.outputFeature0AsTensorBuffer.floatArray[0]
-        val outputFeature1 = outputs.outputFeature1AsTensorBuffer.floatArray[0]
-        val outputFeature2 = outputs.outputFeature2AsTensorBuffer.floatArray[0]
-        val outputFeature3 = outputs.outputFeature3AsTensorBuffer.floatArray[0].roundToInt()
-        model.close()
-        if (outputFeature3==1) {
-            isthumbsup=1
-        } else if (outputFeature3==0) {
-            isthumbsup=0
+        val options = optionsBuilder.build()
+        val gestureRecognizer =
+            GestureRecognizer.createFromOptions(this, options)
+        val mpImage = BitmapImageBuilder(bitmap).build()
+        val result = gestureRecognizer?.recognize(mpImage)
+        Log.i("predict","$result")
+        if (result != null) {
+            if (result.gestures().isNotEmpty()){
+                val gesture = result.gestures()[0][0].categoryName()
+                Log.i("predict","$gesture")
+                if (gesture.toString()=="Thumb_Up") {
+                    isThumbsUp=1
+                }
+                else if(gesture.toString()=="Closed_Fist"){
+                    isThumbsUp=0
+                }
+            }
         }
-        return isthumbsup
+        return isThumbsUp
+
     }
 
     private fun convertBitmapToByteBuffer(resizedBitmap: Bitmap?): ByteBuffer {

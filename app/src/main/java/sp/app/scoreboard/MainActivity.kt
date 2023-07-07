@@ -3,6 +3,7 @@ package sp.app.scoreboard
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.cardview.widget.CardView
 
 class MainActivity : AppCompatActivity() {
@@ -14,6 +15,11 @@ class MainActivity : AppCompatActivity() {
         val fbcv = findViewById<CardView>(R.id.fbcv)
         val bbcv= findViewById<CardView>(R.id.bbcv)
         val bmcv = findViewById<CardView>(R.id.bmcv)
+        val infobtn = findViewById<ImageButton>(R.id.infobtn)
+        infobtn.setOnClickListener {
+            val nextintent = Intent(this,AboutActivity::class.java)
+            startActivity(nextintent)
+        }
         ttcv.setOnClickListener {
             game=1
             val intent = Intent(this,TTMatchForm::class.java)

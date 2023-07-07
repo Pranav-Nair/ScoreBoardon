@@ -21,6 +21,7 @@
         app:layout_constraintGuide_percent="0.93" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@id/listguidebottom"
@@ -263,5 +264,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="1" />
+
+    <ImageButton
+        android:id="@+id/infobtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintBottom_toTopOf="@id/headerguidebottom"
+        app:layout_constraintEnd_toEndOf="@id/cardguideright"
+        app:layout_constraintStart_toEndOf="@id/headerguideright"
+        app:layout_constraintTop_toTopOf="@id/headerguidetop"
+        app:srcCompat="@drawable/info_button_vec" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

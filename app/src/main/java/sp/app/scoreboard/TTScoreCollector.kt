@@ -1,8 +1,10 @@
 package sp.app.scoreboard
 
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModel
@@ -11,6 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 class TTScoreCollector : AppCompatActivity() {
     private lateinit var mymodel : TtScoreTracker
     var matchover : Boolean = false
+
+    lateinit var mediaPlayer: MediaPlayer
+    lateinit var serverplayerdisplay:TextView
+
+    var tosswinner=""
+    var p1name=""
+    var p2name=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +39,11 @@ class TTScoreCollector : AppCompatActivity() {
         }
 
         val intent = intent
-        var p1name=""
-        var p2name=""
         var rounds=0
         val extras = intent.extras
         p1name = extras?.getString("p1_name").toString()
         p2name = extras?.getString("p2_name").toString()
+        tosswinner=extras?.getString("tosswinner").toString()
         rounds = extras?.getInt("rounds")!!
         mymodel = ViewModelProvider(this,TtScoreTrackerFactory(p1name,p2name,rounds)).get(TtScoreTracker::class.java)
 
@@ -46,6 +54,9 @@ class TTScoreCollector : AppCompatActivity() {
         val roundstv = findViewById<TextView>(R.id.roundtv)
         val player1card = findViewById<CardView>(R.id.p1cv)
         val player2card = findViewById<CardView>(R.id.p2cv)
+
+        serverplayerdisplay=findViewById(R.id.serveplayerdisplay)
+        serverplayerdisplay.text=tosswinner
 
         mymodel.matchover.observe(this) {
             matchover = it
@@ -69,6 +80,14 @@ class TTScoreCollector : AppCompatActivity() {
 
         mymodel.curr_round.observe(this) {
             roundstv.text = "Turn : ${it.toString()}"
+            if((it-1)%2==0){
+                serverchange()
+                serverplayerdisplay.text=tosswinner
+                serverplayerdisplay.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                mediaPlayer=MediaPlayer.create(this,R.raw.sound)
+                mediaPlayer.start()
+
+            }
         }
 
 
@@ -97,4 +116,23 @@ class TTScoreCollector : AppCompatActivity() {
             startActivity(intentnext)
         }
     }
+
+    fun serverchange(){
+
+        if(tosswinner==p1name){
+
+            tosswinner=p2name
+        }
+        else{
+            tosswinner=p1name
+        }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
 }

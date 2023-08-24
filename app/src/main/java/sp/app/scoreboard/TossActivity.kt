@@ -18,6 +18,7 @@ class TossActivity : AppCompatActivity() {
     var p2_choice=""
     var usecam = false
     val SupportedGames : List<Int> = listOf(1)
+    var tosswinner = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,24 +67,28 @@ class TossActivity : AppCompatActivity() {
                         intentnext.putExtra("p1_name",p1_name)
                         intentnext.putExtra("p2_name",p2_name)
                         intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                        intentnext.putExtra("tosswinner",tosswinner)
                         startActivity(intentnext)
                     }else if (game==2) {
                         val intentnext = Intent(this,FbScoreCollector::class.java)
                         intentnext.putExtra("p1_name",p1_name)
                         intentnext.putExtra("p2_name",p2_name)
                         intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                        intentnext.putExtra("tosswinner",tosswinner)
                         startActivity(intentnext)
                     } else if (game==3) {
                         val intentnext = Intent(this,BBScoreCollector::class.java)
                         intentnext.putExtra("p1_name",p1_name)
                         intentnext.putExtra("p2_name",p2_name)
                         intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                        intentnext.putExtra("tosswinner",tosswinner)
                         startActivity(intentnext)
                     } else if (game==4) {
                         val intentnext = Intent(this,BMScoreCollector::class.java)
                         intentnext.putExtra("p1_name",p1_name)
                         intentnext.putExtra("p2_name",p2_name)
                         intentnext.putExtra("rounds",extras.getInt("rounds").toString().toInt())
+                        intentnext.putExtra("tosswinner",tosswinner)
                         startActivity(intentnext)
                     }
                 }
@@ -119,8 +124,10 @@ class TossActivity : AppCompatActivity() {
             tossed = true
             if (p1_choice == coinside) {
                 servertv.text = p1_name
+                tosswinner = p1_name
             } else if (p2_choice==coinside) {
                 servertv.text = p2_name
+                tosswinner = p2_name
             }
             coin.isClickable=true
 
